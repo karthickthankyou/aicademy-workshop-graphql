@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { Sheet, SheetContent, SheetTrigger } from '../atoms/sheet'
 import { Menu } from 'lucide-react'
-import { BaseComponent } from '@foundation/util/types'
+import { BaseComponent } from '@aicademy/util/types'
 import { useDialogState } from '../../util/hooks'
 
 export const Sidebar = ({ children }: BaseComponent) => {

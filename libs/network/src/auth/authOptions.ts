@@ -9,7 +9,7 @@ import {
   RegisterWithProviderDocument,
   UserDocument,
 } from '../queries/generated'
-import { MAX_AGE } from '@foundation/util'
+import { MAX_AGE } from '@aicademy/util'
 import { sign, verify } from 'jsonwebtoken'
 
 export const authOptions: NextAuthOptions = {

@@ -1,4 +1,4 @@
-import { BaseComponent } from '@foundation/util/types'
+import { BaseComponent } from '@aicademy/util/types'
 
 export interface IAuthLayoutProps extends BaseComponent {
   title: string

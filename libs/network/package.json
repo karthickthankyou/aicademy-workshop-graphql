@@ -1,5 +1,5 @@
 {
-  "name": "@foundation/network",
+  "name": "@aicademy/network",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@foundation/util": "workspace:^",
+    "@aicademy/util": "workspace:^",
     "@graphql-typed-document-node/core": "^3.2.0",
     "graphql": "^16.8.1",
     "jsonwebtoken": "^9.0.2"

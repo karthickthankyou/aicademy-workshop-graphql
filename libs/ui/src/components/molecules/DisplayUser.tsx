@@ -1,4 +1,4 @@
-import { getAuth } from '@foundation/network/src/auth/authOptions'
+import { getAuth } from '@aicademy/network/src/auth/authOptions'
 import Image from 'next/image'
 
 export const DisplayUser = async () => {

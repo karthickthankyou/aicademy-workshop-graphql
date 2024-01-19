@@ -1,1 +1,1 @@
-import '@foundation/network/next-auth'
+import '@aicademy/network/next-auth'

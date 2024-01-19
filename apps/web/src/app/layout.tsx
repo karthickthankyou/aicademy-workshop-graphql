@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import '@foundation/ui/src/index.css'
-import { Container } from '@foundation/ui/src/components/atoms/container'
-import { Footer } from '@foundation/ui/src/components/organisms/Footer'
-import { Navbar } from '@foundation/ui/src/components/organisms/Navbar'
-import { SessionProvider } from '@foundation/ui/src/components/molecules/SessionProvider'
+import '@aicademy/ui/src/index.css'
+import { Container } from '@aicademy/ui/src/components/atoms/container'
+import { Footer } from '@aicademy/ui/src/components/organisms/Footer'
+import { Navbar } from '@aicademy/ui/src/components/organisms/Navbar'
+import { SessionProvider } from '@aicademy/ui/src/components/molecules/SessionProvider'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {

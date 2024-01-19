@@ -1,6 +1,6 @@
 'use client'
 
-import { useFormLogin } from '@foundation/forms/src/login'
+import { useFormLogin } from '@aicademy/forms/src/login'
 import { signIn } from 'next-auth/react'
 import { AuthLayout } from '../organisms/AuthLayout'
 import Link from 'next/link'

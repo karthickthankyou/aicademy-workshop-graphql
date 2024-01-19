@@ -1,7 +1,7 @@
-import { getAuth } from '@foundation/network/src/auth/authOptions'
-import { add } from '@foundation/sample-lib'
+import { getAuth } from '@aicademy/network/src/auth/authOptions'
+import { add } from '@aicademy/sample-lib'
 import Link from 'next/link'
-import { HomePage } from '@foundation/ui/src/components/templates/HomePage'
+import { HomePage } from '@aicademy/ui/src/components/templates/HomePage'
 
 export default async function Home() {
   const session = await getAuth()

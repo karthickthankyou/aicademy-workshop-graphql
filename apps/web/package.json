@@ -1,5 +1,5 @@
 {
-  "name": "@foundation/web",
+  "name": "@aicademy/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,10 +10,10 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@foundation/forms": "workspace:^",
-    "@foundation/network": "workspace:^",
-    "@foundation/sample-lib": "workspace:^",
-    "@foundation/ui": "workspace:^",
+    "@aicademy/forms": "workspace:^",
+    "@aicademy/network": "workspace:^",
+    "@aicademy/sample-lib": "workspace:^",
+    "@aicademy/ui": "workspace:^",
     "next": "14.0.4",
     "next-auth": "^4.24.5",
     "react": "^18",

@@ -1,7 +1,7 @@
 import { Heart } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '../../util'
-import { BaseComponent } from '@foundation/util/types'
+import { BaseComponent } from '@aicademy/util/types'
 
 export interface IDeveloperInfoProps extends BaseComponent {}
 
