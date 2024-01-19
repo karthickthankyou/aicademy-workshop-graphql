@@ -1,0 +1,56 @@
+mutation registerWithCredentials(
+  $registerWithCredentialsInput: RegisterWithCredentialsInput!
+) {
+  registerWithCredentials(
+    registerWithCredentialsInput: $registerWithCredentialsInput
+  ) {
+    token
+    user {
+      uid
+      updatedAt
+      name
+      image
+      createdAt
+    }
+  }
+}
+
+mutation Login($loginInput: LoginInput!) {
+  login(loginInput: $loginInput) {
+    token
+    user {
+      updatedAt
+      uid
+      name
+      image
+      createdAt
+      email
+    }
+  }
+}
+
+mutation RegisterWithProvider(
+  $registerWithProviderInput: RegisterWithProviderInput!
+) {
+  registerWithProvider(registerWithProviderInput: $registerWithProviderInput) {
+    user {
+      updatedAt
+      uid
+      name
+      image
+      createdAt
+    }
+    token
+  }
+}
+
+query User($where: UserWhereUniqueInput!) {
+  user(where: $where) {
+    updatedAt
+    uid
+    email
+    name
+    image
+    createdAt
+  }
+}
