@@ -5,6 +5,7 @@ import {
   RestrictProperties,
   StringFilter,
 } from 'src/common/dtos/common.input'
+import { StudentListRelationFilter } from 'src/models/students/graphql/dtos/where.args'
 
 @InputType()
 export class UserWhereUniqueInput {
@@ -22,6 +23,7 @@ export class UserWhereInputStrict
       >
     >
 {
+  Student: StudentListRelationFilter
   uid: StringFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter

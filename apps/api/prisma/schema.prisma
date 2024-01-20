@@ -20,11 +20,7 @@ model User {
 
     Credentials  Credentials?
     AuthProvider AuthProvider?
-}
-
-model Admin {
-    uid  String @id
-    user User   @relation(fields: [uid], references: [uid])
+    Student      Student[]
 }
 
 model Credentials {
@@ -47,4 +43,92 @@ model AuthProvider {
 enum AuthProviderType {
     GOOGLE
     CREDENTIALS
+}
+
+model Admin {
+    uid  String @id
+    user User   @relation(fields: [uid], references: [uid])
+
+    courses Course[]
+}
+
+model Student {
+    uid   String @id
+    user  User   @relation(fields: [uid], references: [uid])
+    tests Test[]
+}
+
+model Course {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    title       String
+    description String?
+    image       String?
+    chapters    Chapter[]
+
+    published Boolean? @default(false)
+
+    admin    Admin  @relation(fields: [adminUid], references: [uid])
+    adminUid String
+
+    tests Test[]
+}
+
+model Chapter {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    title     String
+    content   String
+    courseId  Int
+    course    Course     @relation(fields: [courseId], references: [id])
+    questions Question[]
+}
+
+model Question {
+    id            Int            @id @default(autoincrement())
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+    question      String
+    answer        Answer?
+    chapterId     Int
+    chapter       Chapter        @relation(fields: [chapterId], references: [id])
+    testQuestions TestQuestion[]
+}
+
+model Answer {
+    id          Int      @id @default(autoincrement())
+    answer      String
+    explanation String?
+    questionId  Int      @unique
+    question    Question @relation(fields: [questionId], references: [id])
+}
+
+model Test {
+    id        Int            @id @default(autoincrement())
+    createdAt DateTime       @default(now())
+    updatedAt DateTime       @updatedAt
+    courseId  Int
+    course    Course         @relation(fields: [courseId], references: [id])
+    questions TestQuestion[]
+
+    aiTotalScore Int?
+    Student      Student @relation(fields: [studentUid], references: [uid])
+    studentUid   String
+}
+
+model TestQuestion {
+    id            Int    @id @default(autoincrement())
+    studentAnswer String
+
+    aiScore    Int?
+    aiFeedback String?
+
+    testId     Int
+    Test       Test     @relation(fields: [testId], references: [id])
+    questionId Int
+    question   Question @relation(fields: [questionId], references: [id])
 }

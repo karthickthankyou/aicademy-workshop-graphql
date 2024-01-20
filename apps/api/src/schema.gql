@@ -21,9 +21,103 @@ type AuthOutput {
   token: String!
 }
 
+type Admin {
+  uid: String!
+  courses: [Course!]!
+}
+
+type Course {
+  description: String
+  image: String
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  published: Boolean!
+  adminUid: String!
+  chapters: [Chapter!]!
+  tests: [Test!]!
+  admin: Admin!
+}
+
+type Student {
+  uid: String!
+  courses: [Test!]!
+}
+
+type Test {
+  aiTotalScore: Int
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  courseId: Int!
+  studentUid: String!
+  questions: [Question!]!
+  results: [TestQuestion!]!
+  course: Course!
+  student: Student!
+}
+
+type Chapter {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  content: String!
+  courseId: Int!
+  questions: [Question!]!
+  course: Course!
+}
+
+type Question {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  question: String!
+  chapterId: Int!
+  answer: Answer!
+  chapter: Chapter!
+  testQuestions: [TestQuestion!]!
+}
+
+type Answer {
+  explanation: String
+  id: Int!
+  answer: String!
+  questionId: Int!
+  question: Question!
+}
+
+type TestQuestion {
+  aiScore: Int
+  aiFeedback: String
+  id: Int!
+  studentAnswer: String!
+  testId: Int!
+  questionId: Int!
+  question: Question!
+  test: Test!
+}
+
 type Query {
   users(distinct: [UserScalarFieldEnum!], where: UserWhereInput, orderBy: [UserOrderByWithRelationInput!], cursor: UserWhereUniqueInput, take: Int, skip: Int): [User!]!
   user(where: UserWhereUniqueInput!): User!
+  admins(distinct: [AdminScalarFieldEnum!], where: AdminWhereInput, orderBy: [AdminOrderByWithRelationInput!], cursor: AdminWhereUniqueInput, take: Int, skip: Int): [Admin!]!
+  admin(where: AdminWhereUniqueInput!): Admin!
+  students(distinct: [StudentScalarFieldEnum!], where: StudentWhereInput, orderBy: [StudentOrderByWithRelationInput!], cursor: StudentWhereUniqueInput, take: Int, skip: Int): [Student!]!
+  student(where: StudentWhereUniqueInput!): Student!
+  courses(distinct: [CourseScalarFieldEnum!], where: CourseWhereInput, orderBy: [CourseOrderByWithRelationInput!], cursor: CourseWhereUniqueInput, take: Int, skip: Int): [Course!]!
+  course(where: CourseWhereUniqueInput!): Course!
+  chapters(distinct: [ChapterScalarFieldEnum!], where: ChapterWhereInput, orderBy: [ChapterOrderByWithRelationInput!], cursor: ChapterWhereUniqueInput, take: Int, skip: Int): [Chapter!]!
+  chapter(where: ChapterWhereUniqueInput!): Chapter!
+  questions(distinct: [QuestionScalarFieldEnum!], where: QuestionWhereInput, orderBy: [QuestionOrderByWithRelationInput!], cursor: QuestionWhereUniqueInput, take: Int, skip: Int): [Question!]!
+  question(where: QuestionWhereUniqueInput!): Question!
+  answers(distinct: [AnswerScalarFieldEnum!], where: AnswerWhereInput, orderBy: [AnswerOrderByWithRelationInput!], cursor: AnswerWhereUniqueInput, take: Int, skip: Int): [Answer!]!
+  answer(where: AnswerWhereUniqueInput!): Answer!
+  tests(distinct: [TestScalarFieldEnum!], where: TestWhereInput, orderBy: [TestOrderByWithRelationInput!], cursor: TestWhereUniqueInput, take: Int, skip: Int): [Test!]!
+  test(where: TestWhereUniqueInput!): Test!
+  testQuestions(distinct: [TestQuestionScalarFieldEnum!], where: TestQuestionWhereInput, orderBy: [TestQuestionOrderByWithRelationInput!], cursor: TestQuestionWhereUniqueInput, take: Int, skip: Int): [TestQuestion!]!
+  testQuestion(where: TestQuestionWhereUniqueInput!): TestQuestion!
 }
 
 enum UserScalarFieldEnum {
@@ -35,6 +129,7 @@ enum UserScalarFieldEnum {
 }
 
 input UserWhereInput {
+  Student: StudentListRelationFilter
   uid: StringFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
@@ -42,6 +137,21 @@ input UserWhereInput {
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
+}
+
+input StudentListRelationFilter {
+  every: StudentWhereInput
+  some: StudentWhereInput
+  none: StudentWhereInput
+}
+
+input StudentWhereInput {
+  uid: StringFilter
+  user: UserRelationFilter
+  tests: TestListRelationFilter
+  AND: [StudentWhereInput!]
+  OR: [StudentWhereInput!]
+  NOT: [StudentWhereInput!]
 }
 
 input StringFilter {
@@ -64,6 +174,45 @@ enum QueryMode {
   insensitive
 }
 
+input UserRelationFilter {
+  is: UserWhereInput
+  isNot: UserWhereInput
+}
+
+input TestListRelationFilter {
+  every: TestWhereInput
+  some: TestWhereInput
+  none: TestWhereInput
+}
+
+input TestWhereInput {
+  Student: StudentRelationFilter
+  id: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  courseId: IntFilter
+  aiTotalScore: IntFilter
+  studentUid: StringFilter
+  course: CourseRelationFilter
+  questions: TestQuestionListRelationFilter
+  AND: [TestWhereInput!]
+  OR: [TestWhereInput!]
+  NOT: [TestWhereInput!]
+}
+
+input StudentRelationFilter {
+  is: StudentWhereInput
+  isNot: StudentWhereInput
+}
+
+input IntFilter {
+  equals: Int
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+}
+
 input DateTimeFilter {
   equals: String
   in: [String!]
@@ -74,11 +223,150 @@ input DateTimeFilter {
   gte: String
 }
 
+input CourseRelationFilter {
+  is: CourseWhereInput
+  isNot: CourseWhereInput
+}
+
+input CourseWhereInput {
+  id: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  title: StringFilter
+  description: StringFilter
+  image: StringFilter
+  published: BoolFilter
+  adminUid: StringFilter
+  chapters: ChapterListRelationFilter
+  admin: AdminRelationFilter
+  tests: TestListRelationFilter
+  AND: [CourseWhereInput!]
+  OR: [CourseWhereInput!]
+  NOT: [CourseWhereInput!]
+}
+
+input BoolFilter {
+  equals: Boolean
+  not: Boolean
+}
+
+input ChapterListRelationFilter {
+  every: ChapterWhereInput
+  some: ChapterWhereInput
+  none: ChapterWhereInput
+}
+
+input ChapterWhereInput {
+  questions: QuestionListRelationFilter
+  id: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  title: StringFilter
+  content: StringFilter
+  courseId: IntFilter
+  course: CourseRelationFilter
+  AND: [ChapterWhereInput!]
+  OR: [ChapterWhereInput!]
+  NOT: [ChapterWhereInput!]
+}
+
+input QuestionListRelationFilter {
+  every: QuestionWhereInput
+  some: QuestionWhereInput
+  none: QuestionWhereInput
+}
+
+input QuestionWhereInput {
+  id: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  question: StringFilter
+  chapterId: IntFilter
+  answer: AnswerRelationFilter
+  chapter: ChapterRelationFilter
+  testQuestions: TestQuestionListRelationFilter
+  AND: [QuestionWhereInput!]
+  OR: [QuestionWhereInput!]
+  NOT: [QuestionWhereInput!]
+}
+
+input AnswerRelationFilter {
+  is: AnswerWhereInput
+  isNot: AnswerWhereInput
+}
+
+input AnswerWhereInput {
+  id: IntFilter
+  answer: StringFilter
+  explanation: StringFilter
+  questionId: IntFilter
+  question: QuestionRelationFilter
+  AND: [AnswerWhereInput!]
+  OR: [AnswerWhereInput!]
+  NOT: [AnswerWhereInput!]
+}
+
+input QuestionRelationFilter {
+  is: QuestionWhereInput
+  isNot: QuestionWhereInput
+}
+
+input ChapterRelationFilter {
+  is: ChapterWhereInput
+  isNot: ChapterWhereInput
+}
+
+input TestQuestionListRelationFilter {
+  every: TestQuestionWhereInput
+  some: TestQuestionWhereInput
+  none: TestQuestionWhereInput
+}
+
+input TestQuestionWhereInput {
+  id: IntFilter
+  studentAnswer: StringFilter
+  aiScore: IntFilter
+  aiFeedback: StringFilter
+  testId: IntFilter
+  questionId: IntFilter
+  Test: TestRelationFilter
+  question: QuestionRelationFilter
+  AND: [TestQuestionWhereInput!]
+  OR: [TestQuestionWhereInput!]
+  NOT: [TestQuestionWhereInput!]
+}
+
+input TestRelationFilter {
+  is: TestWhereInput
+  isNot: TestWhereInput
+}
+
+input AdminRelationFilter {
+  is: AdminWhereInput
+  isNot: AdminWhereInput
+}
+
+input AdminWhereInput {
+  uid: StringFilter
+  user: UserRelationFilter
+  courses: CourseListRelationFilter
+  AND: [AdminWhereInput!]
+  OR: [AdminWhereInput!]
+  NOT: [AdminWhereInput!]
+}
+
+input CourseListRelationFilter {
+  every: CourseWhereInput
+  some: CourseWhereInput
+  none: CourseWhereInput
+}
+
 input UserOrderByWithRelationInput {
   uid: SortOrder
   createdAt: SortOrder
   updatedAt: SortOrder
   name: SortOrder
+  Student: StudentOrderByRelationAggregateInput
 }
 
 enum SortOrder {
@@ -86,8 +374,204 @@ enum SortOrder {
   desc
 }
 
+input StudentOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input UserWhereUniqueInput {
   uid: String!
+}
+
+enum AdminScalarFieldEnum {
+  uid
+}
+
+input AdminOrderByWithRelationInput {
+  uid: SortOrder
+  user: UserOrderByWithRelationInput
+  courses: CourseOrderByRelationAggregateInput
+}
+
+input CourseOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input AdminWhereUniqueInput {
+  uid: String!
+}
+
+enum StudentScalarFieldEnum {
+  uid
+}
+
+input StudentOrderByWithRelationInput {
+  uid: SortOrder
+  user: UserOrderByWithRelationInput
+  tests: TestOrderByRelationAggregateInput
+}
+
+input TestOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input StudentWhereUniqueInput {
+  uid: String!
+}
+
+enum CourseScalarFieldEnum {
+  id
+  createdAt
+  updatedAt
+  title
+  description
+  image
+  published
+  adminUid
+}
+
+input CourseOrderByWithRelationInput {
+  id: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+  title: SortOrder
+  description: SortOrder
+  image: SortOrder
+  published: SortOrder
+  adminUid: SortOrder
+  chapters: ChapterOrderByRelationAggregateInput
+  admin: AdminOrderByWithRelationInput
+  tests: TestOrderByRelationAggregateInput
+}
+
+input ChapterOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input CourseWhereUniqueInput {
+  id: Int!
+}
+
+enum ChapterScalarFieldEnum {
+  id
+  createdAt
+  updatedAt
+  title
+  content
+  courseId
+}
+
+input ChapterOrderByWithRelationInput {
+  id: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+  title: SortOrder
+  content: SortOrder
+  courseId: SortOrder
+  course: CourseOrderByWithRelationInput
+  questions: QuestionOrderByRelationAggregateInput
+}
+
+input QuestionOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ChapterWhereUniqueInput {
+  id: Int!
+}
+
+enum QuestionScalarFieldEnum {
+  id
+  createdAt
+  updatedAt
+  question
+  chapterId
+}
+
+input QuestionOrderByWithRelationInput {
+  id: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+  question: SortOrder
+  chapterId: SortOrder
+  answer: AnswerOrderByWithRelationInput
+  chapter: ChapterOrderByWithRelationInput
+  testQuestions: TestQuestionOrderByRelationAggregateInput
+}
+
+input AnswerOrderByWithRelationInput {
+  id: SortOrder
+  answer: SortOrder
+  explanation: SortOrder
+  questionId: SortOrder
+  question: QuestionOrderByWithRelationInput
+}
+
+input TestQuestionOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input QuestionWhereUniqueInput {
+  id: Int!
+}
+
+enum AnswerScalarFieldEnum {
+  id
+  answer
+  explanation
+  questionId
+}
+
+input AnswerWhereUniqueInput {
+  id: Int!
+}
+
+enum TestScalarFieldEnum {
+  id
+  createdAt
+  updatedAt
+  courseId
+  aiTotalScore
+  studentUid
+}
+
+input TestOrderByWithRelationInput {
+  id: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+  courseId: SortOrder
+  aiTotalScore: SortOrder
+  studentUid: SortOrder
+  Student: StudentOrderByWithRelationInput
+  course: CourseOrderByWithRelationInput
+  questions: TestQuestionOrderByRelationAggregateInput
+}
+
+input TestWhereUniqueInput {
+  id: Int!
+}
+
+enum TestQuestionScalarFieldEnum {
+  id
+  studentAnswer
+  aiScore
+  aiFeedback
+  testId
+  questionId
+}
+
+input TestQuestionOrderByWithRelationInput {
+  id: SortOrder
+  studentAnswer: SortOrder
+  aiScore: SortOrder
+  aiFeedback: SortOrder
+  testId: SortOrder
+  questionId: SortOrder
+  Test: TestOrderByWithRelationInput
+  question: QuestionOrderByWithRelationInput
+}
+
+input TestQuestionWhereUniqueInput {
+  id: Int!
 }
 
 type Mutation {
@@ -96,6 +580,27 @@ type Mutation {
   login(loginInput: LoginInput!): AuthOutput!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(where: UserWhereUniqueInput!): User!
+  createAdmin(createAdminInput: CreateAdminInput!): Admin!
+  updateAdmin(updateAdminInput: UpdateAdminInput!): Admin!
+  removeAdmin(where: AdminWhereUniqueInput!): Admin!
+  createStudent(createStudentInput: CreateStudentInput!): Student!
+  updateStudent(updateStudentInput: UpdateStudentInput!): Student!
+  removeStudent(where: StudentWhereUniqueInput!): Student!
+  createCourse(createCourseInput: CreateCourseInput!): Course!
+  updateCourse(updateCourseInput: UpdateCourseInput!): Course!
+  removeCourse(where: CourseWhereUniqueInput!): Course!
+  createChapter(createChapterInput: CreateChapterInput!): Chapter!
+  updateChapter(updateChapterInput: UpdateChapterInput!): Chapter!
+  removeChapter(where: ChapterWhereUniqueInput!): Chapter!
+  createQuestion(createQuestionInput: CreateQuestionInput!): Question!
+  updateQuestion(updateQuestionInput: UpdateQuestionInput!): Question!
+  removeQuestion(where: QuestionWhereUniqueInput!): Question!
+  createAnswer(createAnswerInput: CreateAnswerInput!): Answer!
+  updateAnswer(updateAnswerInput: UpdateAnswerInput!): Answer!
+  removeAnswer(where: AnswerWhereUniqueInput!): Answer!
+  createTest(createTestInput: CreateTestInput!): Test!
+  updateTest(updateTestInput: UpdateTestInput!): Test!
+  removeTest(where: TestWhereUniqueInput!): Test!
 }
 
 input RegisterWithProviderInput {
@@ -124,4 +629,85 @@ input LoginInput {
 
 input UpdateUserInput {
   uid: String!
+}
+
+input CreateAdminInput {
+  uid: String!
+}
+
+input UpdateAdminInput {
+  uid: String!
+}
+
+input CreateStudentInput {
+  uid: String!
+}
+
+input UpdateStudentInput {
+  uid: String!
+}
+
+input CreateCourseInput {
+  description: String
+  image: String
+  title: String!
+  published: Boolean!
+  adminUid: String!
+}
+
+input UpdateCourseInput {
+  description: String
+  image: String
+  title: String
+  published: Boolean
+  adminUid: String
+  id: Int!
+}
+
+input CreateChapterInput {
+  title: String!
+  content: String!
+  courseId: Int!
+}
+
+input UpdateChapterInput {
+  title: String
+  content: String
+  courseId: Int
+  id: Int!
+}
+
+input CreateQuestionInput {
+  question: String!
+  chapterId: Int!
+}
+
+input UpdateQuestionInput {
+  question: String
+  chapterId: Int
+  id: Int!
+}
+
+input CreateAnswerInput {
+  explanation: String
+  answer: String!
+  questionId: Int!
+}
+
+input UpdateAnswerInput {
+  explanation: String
+  answer: String
+  questionId: Int
+  id: Int!
+}
+
+input CreateTestInput {
+  courseId: Int!
+  studentUid: String!
+}
+
+input UpdateTestInput {
+  courseId: Int
+  studentUid: String
+  id: Int!
 }
